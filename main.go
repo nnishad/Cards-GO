@@ -1,7 +1,6 @@
 package main
 
 func main() {
-
 	cards := deck{"Ace of Diamonds", newCard()}
 
 	cards.print()

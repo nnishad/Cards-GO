@@ -1,21 +1,47 @@
 package main
 
+import "fmt"
+
+type contactInfo struct {
+	email   string
+	zipCode int
+}
+type person struct {
+	firstName string
+	lastName  string
+	contactInfo
+}
+
 func main() {
-	//cards := newDeck()
+	//alex := person{firstName: "Alex", lastName: "Anderson"}
+	//fmt.Println(alex)
+	//
+	var alex person
+	alex.firstName = "Alex"
 
-	//hand, remainingCards := deal(cards, 3)
-	//hand.print()
-	//remainingCards.print()
+	fmt.Printf("%+v", alex)
 
-	//fmt.Print(cards.toString())
-	//err := cards.saveToFile("my_deck")
-	//if err != nil {
-	//	return
-	//}
+	jim := person{
+		firstName: "Jim",
+		lastName:  "Party",
+		contactInfo: contactInfo{
+			email:   "abc@gmail.com",
+			zipCode: 98989,
+		},
+	}
 
-	newDeck := newDeckFromFile("my_deck")
-	//fmt.Println(newDeck)
+	jim.print()
 
-	newDeck.shuffle()
-	newDeck.print()
+	jim.updateName("CoolBoy")
+
+	jim.print()
+}
+
+func (p person) updateName(newFirstName string) {
+	p.firstName = newFirstName
+}
+
+func (p person) print() {
+	fmt.Println()
+	fmt.Printf("%+v", p)
 }

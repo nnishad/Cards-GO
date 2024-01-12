@@ -2,47 +2,17 @@ package main
 
 import "fmt"
 
-type contactInfo struct {
-	email   string
-	zipCode int
-}
-type person struct {
-	firstName string
-	lastName  string
-	contactInfo
-}
-
 func main() {
-	//alex := person{firstName: "Alex", lastName: "Anderson"}
-	//fmt.Println(alex)
-	//
-	var alex person
-	alex.firstName = "Alex"
-
-	fmt.Printf("%+v", alex)
-
-	jim := person{
-		firstName: "Jim",
-		lastName:  "Party",
-		contactInfo: contactInfo{
-			email:   "abc@gmail.com",
-			zipCode: 98989,
-		},
+	colors := map[string]string{
+		"red":   "#ff0000",
+		"green": "#4bf745",
+		"white": "#ffffff",
 	}
-
-	jim.print()
-
-	//jimPointer := &jim
-	jim.updateName("CoolBoy")
-
-	jim.print()
+	printMap(colors)
 }
 
-func (pointer *person) updateName(newFirstName string) {
-	(*pointer).firstName = newFirstName
-}
-
-func (p person) print() {
-	fmt.Println()
-	fmt.Printf("%+v", p)
+func printMap(c map[string]string) {
+	for color, hex := range c {
+		fmt.Println("Hex code for", color, "is", hex)
+	}
 }

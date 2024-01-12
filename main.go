@@ -1,34 +1,42 @@
 package main
 
-import "fmt"
-
-type bot interface {
-	getGreeting() string
-}
-type englishBot struct {
-}
-
-type spanishBot struct {
-}
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
 
 func main() {
+	links := []string{
+		"http://google.com",
+		"http://facebook.com",
+		"http://stackoverflow.com",
+		"http://golang.org",
+		"http://amazon.com",
+	}
 
-	eb := englishBot{}
-	sb := spanishBot{}
+	c := make(chan string)
 
-	printGreeting(eb)
-	printGreeting(sb)
+	for _, link := range links {
+		go checkLink(link, c)
+	}
 
+	for l := range c {
+		go func(link string) {
+			time.Sleep(5 * time.Second)
+			checkLink(link, c)
+		}(l)
+	}
 }
 
-func printGreeting(b bot) {
-	fmt.Println(b.getGreeting())
-}
+func checkLink(link string, c chan string) {
+	_, err := http.Get(link)
+	if err != nil {
+		fmt.Println(link, "might be down!")
+		c <- link
+		return
+	}
 
-func (englishBot) getGreeting() string {
-	return "Hi there!"
-}
-
-func (spanishBot) getGreeting() string {
-	return "Hollaa!!"
+	fmt.Println(link, "is up!")
+	c <- link
 }

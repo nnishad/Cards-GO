@@ -1,6 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
+)
 
 type deck []string
 
@@ -26,6 +32,33 @@ func (d deck) print() {
 	}
 }
 
+func (d deck) toString() string {
+	return strings.Join(d, ",")
+}
+
 func deal(d deck, handSize int) (deck, deck) {
 	return d[:handSize], d[handSize:]
+}
+
+func (d deck) saveToFile(filename string) error {
+	return os.WriteFile(filename, []byte(d.toString()), 0666)
+}
+
+func newDeckFromFile(filename string) deck {
+	byteDeck, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Print(err)
+		os.Exit(1)
+	}
+	return strings.Split(string(byteDeck), ",")
+}
+
+func (d deck) shuffle() {
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
+
+	for idx := range d {
+		newPosition := r.Intn(len(d) - 1)
+		d[idx], d[newPosition] = d[newPosition], d[idx]
+	}
 }
